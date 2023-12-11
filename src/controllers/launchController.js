@@ -1,5 +1,5 @@
 const Launch = require('../model/launchModel');
-// const textApiProvider = require('../providers/textApiProvider.js');
+const textApiProvider = require('../providers/textApiProvider.js');
 
 exports.listAllLaunches = async (req, res) => {
 
@@ -19,12 +19,12 @@ exports.createALaunch = async (req, res) => {
     try {
         let newLaunch = new Launch(req.body);
 
-        // let randomTextPromise = textApiProvider.getFlightNumber();
-        // let response = await randomTextPromise;
+        let randomTextPromise = textApiProvider.getFlightNumber();
+        let response = await randomTextPromise;
 
-        // if (!newLaunch.message) {
-        //     newLaunch.content = response;
-        // }
+        if (!newLaunch.mission_name) {
+            newLaunch.mission_name = response;
+        }
 
         let launch = await newLaunch.save();
         res.status(200).json(launch);
