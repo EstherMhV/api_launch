@@ -1,88 +1,77 @@
-const Comment = require('../models/commentModel');
-const Post = require('../models/postModel');
+const Launch = require('../model/launchModel');
+// const textApiProvider = require('../providers/textApiProvider.js');
 
-exports.listAllComments = async (req,res) => {
+exports.listAllLaunches = async (req, res) => {
+
     try {
-        const comments = await Comment.find({post_id: req.params.id_post});
+        const launches = await Launch.find({});
         res.status(200);
-        res.json(comments);
+        res.json(launches);
     }
     catch (error) {
         res.status(500);
         console.log(error);
-        res.json({ message:'Erreur serveur'});
+        res.json({ message: 'Erreur serveur' });
     }
 }
 
+exports.createALaunch = async (req, res) => {
+    try {
+        let newLaunch = new Launch(req.body);
 
-exports.createAComment = async (req, res) => {
+        // let randomTextPromise = textApiProvider.getFlightNumber();
+        // let response = await randomTextPromise;
+
+        // if (!newLaunch.message) {
+        //     newLaunch.content = response;
+        // }
+
+        let launch = await newLaunch.save();
+        res.status(200).json(launch);
+
+    } catch (error) {
+        console.log(error);
+        res.status(401).json({ message: 'Requete invalide' });
+    }
+}
+
+exports.updateALaunch = async (req, res) => {
+    try {
+        const launch = await Launch.findByIdAndUpdate(req.params.id_launch, req.body, { new: true });
+        res.status(200);
+        res.json(launch);
+    }
+    catch (error) {
+        res.status(500);
+        console.log(error);
+        res.json({ message: 'Erreur serveur' });
+    }
+}
+
+exports.deleteALaunch = async (req, res) => {
 
     try {
-        const post = await Post.findById(req.params.id_post);
-        const newCommment = new Comment({...req.body, post_id: req.params.id_post});
-
-
-        try{
-            const comment = await newCommment.save();
-            res.status(200);
-            res.json(comment);
-        }
-        catch (error) {
-            res.status(500);
-            console.log(error);
-            res.json({ message: 'Erreur serveur(db)' });
-        }
-    }catch(error){
+        const launch = await Launch.findByIdAndDelete(req.params.id_launch, req.body, { new: true });
+        res.status(200);
+        res.json({ message: 'Supprimé' });
+    }
+    catch (error) {
+        res.status(500);
         console.log(error);
-        res.json({ message: 'Erreur serveur(post-id inexistant' });
+        res.json({ message: 'Erreur serveur' });
     }
 }
 
-exports.updateAComment = async(req, res) =>{
-    try{
-        const comment = await Comment.findByIdAndUpdate(req.params.id_post, req.body, {new: true});
-        if(!comment){
-            res.status(204)
-            console.log(error);
-            res.json({ message : 'id not found'});
+exports.getALaunch = async (req, res) => {
 
-        }else{
-
-        }
+    try {
+        const launch = await Launch.findById(req.params.id_launch);
         res.status(200);
-        res.json(comment);
+        res.json(launch);
     }
-    catch(error){
+    catch (error) {
         res.status(500);
         console.log(error);
-        res.json({ message : 'Erreur serveur'});
-    }
-}
-
-exports.deleteAComment = async(req, res) =>{
-
-    try{
-        const comment = await Comment.findByIdAndDelete(req.params.id_post, req.body, {new: true});
-        res.status(200);
-        res.json({ message : 'Supprimé'});
-    }
-    catch(error){
-        res.status(500);
-        console.log(error);
-        res.json({ message : 'Erreur serveur'});
-    }
-}
-
-exports.getAComment = async(req, res) =>{
-
-    try{
-        const comment =await Comment.findById(req.params.id_post);
-        res.status(200);
-        res.json(comment);
-    }
-    catch(error){
-        res.status(500);
-        console.log(error);
-        res.json({ message : 'Erreur serveur'});
+        res.json({ message: 'Erreur serveur' });
     }
 }

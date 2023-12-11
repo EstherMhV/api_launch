@@ -6,7 +6,7 @@ const port = 3000;
 const mongoose = require("mongoose")
 
 // //mongoose.connect('mongodb:mongo/apinode'); //docker
-mongoose.connect('mongodb://0.0.0.0:27017/apilaunch'); //instllation locale
+mongoose.connect('mongodb://0.0.0.0:27017/apiLaunch'); //instllation locale
 
 app.use(express.urlencoded());
 app.use(express.json());

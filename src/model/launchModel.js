@@ -1,22 +1,20 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-let launchSchema = new Schema ({
-    name: {
-        type : String,
+let launchSchema = new Schema({
+    mission_name: {
+        type: String,
         required: true
     },
-    message: {
-        type : String,
-        required: 'un messages'
-    },
-    created_at: {
+    launch_year: {
         type: Date,
         default: Date.now
     },
-    post_id: {
-        type:String,
+    flight_number: {
+        type: Number,
+        required: 'un nombre'
     }
+
 })
 
-module.exports = mongoose.model('omments', commentSchema);
+module.exports = mongoose.model('launch', launchSchema);
